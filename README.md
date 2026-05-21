@@ -1,40 +1,34 @@
-# Heck Holdings Next.js Site
+# Heck Holdings Website
 
-A professional Next.js landing page for Heck Holdings, positioned around practical AI solutions, AI agent infrastructure, agentic workflows, and automation for everyday businesses.
+Professional Next.js site for Heck Holdings, focused on AI agents, business automation, agentic workflows, and practical AI consulting.
 
-## Run locally
+## What's included
+
+- Homepage with polished AI positioning
+- CTA form that prepares an email audit request
+- Case-study/use-case section
+- GSAP scroll animation polish
+- SEO landing pages:
+  - `/ai-agents`
+  - `/business-automation`
+  - `/ai-consulting`
+  - `/agentic-workflows`
+- Sitemap and robots routes
+- Vercel-ready Next.js configuration
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+## Production build
 
-## Fastest deployment path: Vercel
-
-1. Create a GitHub repository and upload this folder.
-2. Go to Vercel and import the repository.
-3. Vercel auto-detects Next.js. Keep the default build settings.
-4. Add `heckholdings.com` under Project Settings > Domains.
-5. In Bluehost DNS, point the domain to Vercel using the DNS records Vercel gives you.
-
-Typical Vercel records:
-
-```text
-A     @      76.76.21.21
-CNAME www    cname.vercel-dns.com
+```bash
+npm run build
 ```
 
-Use the exact records shown in your Vercel dashboard if they differ.
+## Deploy
 
-## Cloudflare Pages option
-
-Cloudflare Pages can also host Next.js, but Vercel is the easiest first deployment for a full Next.js app with animations.
-If you want Cloudflare mainly for DNS/security, add `heckholdings.com` to Cloudflare, change nameservers at Bluehost, then connect Vercel while keeping Cloudflare DNS active.
-
-## Customize
-
-Edit `app/page.tsx` for copy and sections.
-Edit `app/globals.css` for global styling.
-Edit `app/layout.tsx` for metadata and SEO.
+Push to GitHub. Vercel will automatically redeploy the site.

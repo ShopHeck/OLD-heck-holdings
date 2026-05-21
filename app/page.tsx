@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { ArrowRight, Bot, BrainCircuit, Check, Cpu, Layers3, ShieldCheck, Sparkles, Workflow, Zap } from 'lucide-react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { ArrowRight, Bot, BrainCircuit, Check, Cpu, Layers3, Mail, MessageSquare, ShieldCheck, Sparkles, Workflow, Zap } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { servicePages } from './services';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -12,13 +13,13 @@ const capabilities = [
   {
     icon: Bot,
     title: 'AI agent infrastructure',
-    body: 'Custom agent systems that can reason across tools, follow business rules, and execute repeatable work with human approval where it matters.',
+    body: 'Custom agent systems that reason across business tools, follow operating rules, draft work, route requests, and escalate decisions when human approval matters.',
     className: 'md:col-span-2 md:row-span-2'
   },
   {
     icon: Workflow,
     title: 'Agentic workflows',
-    body: 'Structured automations that move work from intake to completion across sales, service, operations, marketing, and admin.',
+    body: 'Multi-step automations that move work from intake to completion across sales, service, operations, marketing, and admin.',
     className: 'md:col-span-1 md:row-span-1'
   },
   {
@@ -41,8 +42,31 @@ const capabilities = [
   }
 ];
 
+const caseStudies = [
+  {
+    title: 'AI receptionist',
+    result: 'Respond faster without adding front-desk headcount.',
+    body: 'Capture inbound requests, qualify intent, draft replies, route urgent issues, and prepare follow-up tasks for owners or staff.'
+  },
+  {
+    title: 'Lead qualification agents',
+    result: 'Move prospects from interest to action faster.',
+    body: 'Score leads, enrich records, draft personalized outreach, schedule reminders, and keep the CRM clean automatically.'
+  },
+  {
+    title: 'Workflow automation',
+    result: 'Remove recurring admin from daily operations.',
+    body: 'Turn forms, inboxes, spreadsheets, and approvals into connected workflows that reduce copy-paste work and missed handoffs.'
+  },
+  {
+    title: 'Support automation',
+    result: 'Give customers faster answers with human oversight.',
+    body: 'Classify tickets, draft responses, search internal knowledge, flag edge cases, and route complex issues to the right person.'
+  }
+];
+
 const workflowCards = [
-  ['Map the bottleneck', 'We find the repetitive work slowing down growth: manual follow-ups, reporting, lead handling, customer support, data entry, and coordination.'],
+  ['Map the bottleneck', 'We identify the repetitive work slowing down growth: manual follow-ups, reporting, lead handling, customer support, data entry, and coordination.'],
   ['Design the agent layer', 'We define the tools, permissions, data sources, instructions, approvals, and business logic an AI agent needs to operate reliably.'],
   ['Automate with control', 'We deploy workflows that complete tasks, surface exceptions, and keep owners informed without removing human judgment.'],
   ['Improve every cycle', 'We measure time saved, handoff quality, conversion lift, response speed, and operational capacity to refine the system.']
@@ -53,14 +77,15 @@ const outcomes = ['Recover hours of manual work every week', 'Respond to leads a
 function Nav() {
   return (
     <header className="fixed left-0 right-0 top-5 z-50 flex justify-center px-4">
-      <nav className="flex w-full max-w-5xl items-center justify-between rounded-full border border-white/10 bg-ink/70 px-5 py-3 shadow-2xl backdrop-blur-xl">
+      <nav className="flex w-full max-w-6xl items-center justify-between rounded-full border border-white/10 bg-ink/75 px-5 py-3 shadow-2xl backdrop-blur-xl">
         <a href="#top" className="text-sm font-semibold tracking-[0.24em] text-bone">HECK HOLDINGS</a>
         <div className="hidden items-center gap-7 text-sm text-fog md:flex">
           <a className="transition hover:text-white" href="#systems">Systems</a>
+          <a className="transition hover:text-white" href="#case-studies">Use Cases</a>
           <a className="transition hover:text-white" href="#workflow">Workflow</a>
-          <a className="transition hover:text-white" href="#outcomes">Outcomes</a>
+          <a className="transition hover:text-white" href="#contact">Contact</a>
         </div>
-        <a href="mailto:heck@ryseseo.com" className="rounded-full bg-bone px-4 py-2 text-sm font-semibold text-ink transition hover:scale-105">Start a build</a>
+        <a href="#contact" className="rounded-full bg-bone px-4 py-2 text-sm font-semibold text-ink transition hover:scale-105">Book audit</a>
       </nav>
     </header>
   );
@@ -83,16 +108,16 @@ function Hero() {
             Heck Holdings builds artificial intelligence solutions, agent infrastructure, and automated workflows that remove time-consuming work so everyday businesses can focus on growth.
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <a href="mailto:heck@ryseseo.com" className="group inline-flex items-center justify-center gap-3 rounded-full bg-bone px-7 py-4 font-semibold text-ink transition hover:scale-[1.03]">
-              Build an AI workflow <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            <a href="#contact" className="group inline-flex items-center justify-center gap-3 rounded-full bg-bone px-7 py-4 font-semibold text-ink transition hover:scale-[1.03]">
+              Book an AI automation audit <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </a>
-            <a href="#systems" className="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 font-semibold text-bone transition hover:border-white/40 hover:bg-white/10">
-              See the operating layer
+            <a href="#case-studies" className="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 font-semibold text-bone transition hover:border-white/40 hover:bg-white/10">
+              Explore use cases
             </a>
           </div>
         </div>
 
-        <div className="relative min-h-[34rem] overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-4 shadow-glow">
+        <div className="hero-visual relative min-h-[34rem] overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-4 shadow-glow">
           <img src="https://picsum.photos/seed/ai-infrastructure/1200/1400" alt="Abstract AI infrastructure" className="absolute inset-0 h-full w-full scale-105 object-cover opacity-45 grayscale contrast-125" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
           <div className="relative flex h-full flex-col justify-end p-6">
@@ -119,7 +144,7 @@ function Systems() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 max-w-4xl">
           <h2 className="text-[clamp(2.4rem,5vw,5.6rem)] font-semibold leading-[0.96] tracking-[-0.06em]">A practical AI layer over the work businesses already do.</h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-fog">The goal is not novelty. It is operational leverage: faster responses, cleaner handoffs, fewer repetitive tasks, and systems that help teams stay focused on revenue.</p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-fog">The goal is operational leverage: faster responses, cleaner handoffs, fewer repetitive tasks, and systems that help teams stay focused on revenue.</p>
         </div>
         <div className="grid auto-rows-[17rem] grid-flow-dense grid-cols-1 gap-4 md:grid-cols-4">
           {capabilities.map((capability) => {
@@ -142,22 +167,46 @@ function Systems() {
   );
 }
 
+function CaseStudies() {
+  return (
+    <section id="case-studies" className="relative overflow-hidden px-5 py-32 md:py-48">
+      <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <h2 className="max-w-4xl text-[clamp(2.4rem,5vw,5.6rem)] font-semibold leading-[0.96] tracking-[-0.06em]">High-leverage AI systems businesses can use immediately.</h2>
+          <a href="/ai-agents" className="inline-flex items-center gap-2 text-sm font-semibold text-signal transition hover:text-bone">View AI agent services <ArrowRight className="h-4 w-4" /></a>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {caseStudies.map((study) => (
+            <article key={study.title} className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045]">
+              <div className="h-48 overflow-hidden">
+                <img src={`https://picsum.photos/seed/${encodeURIComponent(study.title)}/900/700`} alt="AI automation use case" className="h-full w-full object-cover opacity-60 grayscale contrast-125 transition duration-700 group-hover:scale-110" />
+              </div>
+              <div className="p-7">
+                <h3 className="text-2xl font-semibold tracking-[-0.04em] text-bone">{study.title}</h3>
+                <p className="mt-3 font-medium text-signal">{study.result}</p>
+                <p className="mt-4 leading-7 text-fog">{study.body}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WorkflowSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(() => {
+    gsap.fromTo('.hero-visual', { scale: 0.92, opacity: 0.45 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'power3.out' });
     const cards = gsap.utils.toArray<HTMLElement>('.stack-card');
     cards.forEach((card, index) => {
       gsap.fromTo(card, { y: 90, scale: 0.92, opacity: 0.35 }, {
         y: index * -18,
         scale: 1,
         opacity: 1,
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 82%',
-          end: 'top 42%',
-          scrub: true
-        }
+        scrollTrigger: { trigger: card, start: 'top 82%', end: 'top 42%', scrub: true }
       });
     });
   }, { scope: sectionRef });
@@ -167,7 +216,7 @@ function WorkflowSection() {
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr]">
         <div className="lg:sticky lg:top-32 lg:h-fit">
           <h2 className="text-[clamp(2.4rem,4.8vw,5.2rem)] font-semibold leading-none tracking-[-0.06em]">From manual tasks to managed agentic workflows.</h2>
-          <p className="mt-6 text-lg leading-8 text-fog">Heck Holdings turns messy recurring work into controlled AI-assisted systems that can operate across tools while keeping the business owner in command.</p>
+          <p className="mt-6 text-lg leading-8 text-fog">Heck Holdings turns messy recurring work into controlled AI-assisted systems that operate across tools while keeping the business owner in command.</p>
         </div>
         <div className="space-y-6">
           {workflowCards.map(([title, body], index) => (
@@ -193,17 +242,7 @@ function Outcomes() {
   useGSAP(() => {
     if (!textRef.current) return;
     const spans = textRef.current.querySelectorAll('span');
-    gsap.to(spans, {
-      opacity: 1,
-      stagger: 0.08,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: textRef.current,
-        start: 'top 78%',
-        end: 'bottom 38%',
-        scrub: true
-      }
-    });
+    gsap.to(spans, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: textRef.current, start: 'top 78%', end: 'bottom 38%', scrub: true } });
   }, []);
 
   return (
@@ -215,9 +254,7 @@ function Outcomes() {
         </p>
         <div className="mt-20 grid gap-4 md:grid-cols-5">
           {outcomes.map((outcome) => (
-            <div key={outcome} className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-6 text-sm font-medium leading-6 text-bone">
-              {outcome}
-            </div>
+            <div key={outcome} className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-6 text-sm font-medium leading-6 text-bone">{outcome}</div>
           ))}
         </div>
       </div>
@@ -225,26 +262,55 @@ function Outcomes() {
   );
 }
 
-function FinalCta() {
+function ContactForm() {
+  const [status, setStatus] = useState('');
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get('name') || '');
+    const email = String(form.get('email') || '');
+    const business = String(form.get('business') || '');
+    const message = String(form.get('message') || '');
+    const subject = encodeURIComponent('AI Automation Audit Request');
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nBusiness: ${business}\n\nWhat they want automated:\n${message}`);
+    window.location.href = `mailto:heck@ryseseo.com?subject=${subject}&body=${body}`;
+    setStatus('Opening your email app with the audit request prepared.');
+  }
+
   return (
-    <footer className="px-5 pb-8 pt-24">
+    <section id="contact" className="px-5 pb-8 pt-24">
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-bone p-8 text-ink md:p-14">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
-            <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-bone"><Sparkles className="h-4 w-4" /> Heck Holdings</div>
-            <h2 className="max-w-4xl text-[clamp(2.5rem,6vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.07em]">Put AI to work where your business loses time.</h2>
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-bone"><Sparkles className="h-4 w-4" /> AI automation audit</div>
+            <h2 className="max-w-4xl text-[clamp(2.5rem,6vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.07em]">Find the work your business should not be doing manually.</h2>
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-ink/70">Tell us where time is being lost. Heck Holdings will help identify the fastest path to AI agents, automation, and agentic workflows that create operational leverage.</p>
+            <div className="mt-10 grid gap-3 text-sm text-ink/70 sm:grid-cols-2">
+              <a href="/business-automation" className="rounded-2xl border border-ink/10 p-4 transition hover:bg-ink/5">Business automation</a>
+              <a href="/agentic-workflows" className="rounded-2xl border border-ink/10 p-4 transition hover:bg-ink/5">Agentic workflows</a>
+              <a href="/ai-consulting" className="rounded-2xl border border-ink/10 p-4 transition hover:bg-ink/5">AI consulting</a>
+              <a href="/ai-agents" className="rounded-2xl border border-ink/10 p-4 transition hover:bg-ink/5">AI agents</a>
+            </div>
           </div>
-          <div>
-            <p className="text-lg leading-8 text-ink/70">For everyday businesses ready to automate the busywork, modernize operations, and build an AI operating layer that supports real growth.</p>
-            <a href="mailto:heck@ryseseo.com" className="mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 font-semibold text-bone transition hover:scale-[1.03]">Contact Heck Holdings <ArrowRight className="h-4 w-4" /></a>
-          </div>
+          <form onSubmit={handleSubmit} className="rounded-[2rem] bg-ink p-6 text-bone shadow-2xl md:p-8">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm text-fog">Name<input name="name" required className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-bone outline-none transition focus:border-signal" /></label>
+              <label className="block text-sm text-fog">Email<input name="email" type="email" required className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-bone outline-none transition focus:border-signal" /></label>
+            </div>
+            <label className="mt-4 block text-sm text-fog">Business<input name="business" className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-bone outline-none transition focus:border-signal" /></label>
+            <label className="mt-4 block text-sm text-fog">What do you want to automate?<textarea name="message" required rows={5} className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-bone outline-none transition focus:border-signal" /></label>
+            <button type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-full bg-bone px-7 py-4 font-semibold text-ink transition hover:scale-[1.02]"><Mail className="h-4 w-4" /> Prepare audit request</button>
+            <a href="mailto:heck@ryseseo.com" className="mt-4 inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/15 px-7 py-4 font-semibold text-bone transition hover:bg-white/10"><MessageSquare className="h-4 w-4" /> Email directly</a>
+            {status && <p className="mt-4 text-sm text-signal">{status}</p>}
+          </form>
         </div>
         <div className="mt-16 flex flex-col justify-between gap-4 border-t border-ink/10 pt-6 text-sm text-ink/55 md:flex-row">
           <span>heckholdings.com</span>
           <span>Artificial intelligence, agent infrastructure, workflow automation.</span>
         </div>
       </div>
-    </footer>
+    </section>
   );
 }
 
@@ -258,9 +324,10 @@ export default function Home() {
       <Nav />
       <Hero />
       <Systems />
+      <CaseStudies />
       <WorkflowSection />
       <Outcomes />
-      <FinalCta />
+      <ContactForm />
     </main>
   );
 }
